@@ -1,8 +1,8 @@
-/* Téma admin aplikácií pre Tailwind 4 + komponenty shadcn-vue (Reka UI) z @supiik/admin-kit.
+/* Téma admin aplikácií pre Tailwind 4 + komponenty shadcn-vue (Reka UI) z @supiik/pico-ui.
    Použitie v aplikácii (src/global.css):
      @import "tailwindcss";
-     @import "@supiik/admin-kit/theme.css";
-     @source "../node_modules/@supiik/admin-kit/src";
+     @import "@supiik/pico-ui/theme.css";
+     @source "../node_modules/@supiik/pico-ui/src";
    Farby sú CSS premenné; veľkosti v rem. */
 @import "tw-animate-css";
 @import "./shadcn-variants.css";
