@@ -10,7 +10,17 @@ import SidebarNav from './SidebarNav.vue'
 import PrefsSwitch from './PrefsSwitch.vue'
 import { pt } from '../messages.ts'
 
-const props = defineProps<{ title: string; sections: NavSection[]; user?: string; footer?: string }>()
+defineProps<{
+  title: string
+  sections: NavSection[]
+  user?: string
+  /** pätička vľavo (napr. názov aplikácie); bez neho názov z title */
+  footer?: string
+  /** verzia aplikácie (package.json) do pätičky vpravo, napr. 0.3.0 */
+  version?: string
+  /** skrátený commit buildu (AWS_COMMIT_ID v Amplify) – pri verzii */
+  build?: string
+}>()
 const emit = defineEmits<{ logout: [] }>()
 const mobileOpen = ref(false)
 // po zmene stránky (hash) sa vysúvacie menu zatvorí
@@ -45,8 +55,12 @@ onBeforeUnmount(() => window.removeEventListener('hashchange', close))
       <main id="obsah" class="flex-1 overflow-y-auto p-4 md:p-6">
         <div class="mx-auto max-w-6xl space-y-6"><slot /></div>
       </main>
-      <footer v-if="footer || $slots.footer" class="flex shrink-0 items-center justify-between border-t px-4 py-3 text-xs text-muted-foreground md:px-6">
-        <slot name="footer">{{ footer }}</slot>
+      <!-- pätička ako v orgasme: vľavo názov, vpravo verzia (a build) -->
+      <footer v-if="footer || version || $slots.footer" class="flex shrink-0 items-center justify-between gap-4 border-t px-4 py-3 text-xs text-muted-foreground md:px-6">
+        <slot name="footer">
+          <span>{{ footer ?? title }}</span>
+          <span v-if="version" class="tabular-nums">v{{ version }}<template v-if="build"> · <span class="font-mono">{{ build }}</span></template></span>
+        </slot>
       </footer>
     </div>
   </div>
