@@ -9,5 +9,8 @@ Bezpečnosť (prihlásenie, oprávnenia, kontrakt) je v samostatnom balíku `@su
   Všetky tabuľky majú zebru (`ui/table/Table.vue`), každé čakanie spinner, potvrdenie cez `confirm()` (nie `window.confirm`).
 - Ikony aplikácií: názov v `iconNames.ts` (bez Vue – používa ho aj syntéza CDK), komponent v `icons.ts`.
 - Prístupnosť: ovládanie klávesnicou, viditeľné zameranie, texty pre čítačku, veľkosti v `rem`.
-- Verzie: zmena → `version` v package.json → tag `vX.Y.Z` → aplikácie si zvýšia verziu. Bez buildu – balík je zdrojový.
+- Balík je zdrojový (Vite ho skompiluje), okrem `dist/iconNames.js` pre Node (syntéza CDK nespúšťa TypeScript z `node_modules`);
+  vytvára ho `npm run build` (aj `npm test`), commituj ho s `src/`. Súbor so stavom (napr. `confirm.ts`) nikdy nedávaj do `dist/` –
+  vznikli by dve inštancie.
+- Verzie: zmena → `version` v package.json → commit → aplikácie si zmenia commit v závislosti `git+https://github.com/supiik/pico-ui.git#<commit>`.
 - Pred commitom `npm test` a `npm run typecheck`.

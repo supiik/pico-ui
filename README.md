@@ -18,7 +18,7 @@ Balík je zdrojový (TypeScript a Vue SFC bez buildu) – skompiluje ho Vite apl
 ## Použitie v aplikácii
 
 ```bash
-npm i github:supiik/pico-ui#v0.1.0
+npm i git+https://github.com/supiik/pico-ui.git#<commit>
 npm i reka-ui @lucide/vue @vueuse/core class-variance-authority clsx tailwind-merge tw-animate-css
 ```
 
@@ -34,5 +34,5 @@ npm i reka-ui @lucide/vue @vueuse/core class-variance-authority clsx tailwind-me
 
 ## Zmeny
 
-Zmena → test (`npm test`, `npm run typecheck`) → nová verzia v `package.json` → tag `vX.Y.Z` → v aplikáciách
-`npm i github:supiik/pico-ui#vX.Y.Z`.
+Zmena → test (`npm test`, `npm run typecheck`) → nová verzia v `package.json` → commit (s `dist/`) → v aplikáciách
+`npm i git+https://github.com/supiik/pico-ui.git#<commit>`.

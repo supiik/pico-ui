@@ -6,7 +6,8 @@
   "private": true,
   "type": "module",
   "files": [
-    "src"
+    "src",
+    "dist"
   ],
   "exports": {
     "./utils": "./src/utils.ts",
@@ -19,13 +20,18 @@
     "./AppIcon.vue": "./src/components/AppIcon.vue",
     "./confirm": "./src/confirm.ts",
     "./icons": "./src/icons.ts",
-    "./iconNames": "./src/iconNames.ts",
+    "./iconNames": {
+      "types": "./src/iconNames.ts",
+      "node": "./dist/iconNames.js",
+      "default": "./src/iconNames.ts"
+    },
     "./AppShell.vue": "./src/components/AppShell.vue",
     "./SidebarNav.vue": "./src/components/SidebarNav.vue",
     "./nav": "./src/nav.ts"
   },
   "scripts": {
-    "test": "vitest run",
+    "build": "tsc -p tsconfig.build.json",
+    "test": "npm run build && vitest run",
     "typecheck": "vue-tsc --noEmit -p tsconfig.json"
   },
   "peerDependencies": {
