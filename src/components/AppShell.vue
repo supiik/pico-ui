@@ -14,6 +14,8 @@ defineProps<{
   title: string
   sections: NavSection[]
   user?: string
+  /** horná lišta vľavo: kde som (napr. „Orgasm admin“); bez neho title */
+  heading?: string
   /** pätička vľavo (napr. názov aplikácie); bez neho názov z title */
   footer?: string
   /** verzia aplikácie (package.json) do pätičky vpravo, napr. 0.3.0 */
@@ -48,10 +50,14 @@ onBeforeUnmount(() => window.removeEventListener('hashchange', close))
     </Sheet>
 
     <div class="flex min-w-0 flex-1 flex-col overflow-hidden">
-      <header class="flex h-14 shrink-0 items-center gap-2 border-b bg-card px-2 md:hidden">
-        <Button variant="ghost" size="icon" :aria-label="pt('openMenu')" @click="mobileOpen = true"><Menu class="size-5" aria-hidden="true" /></Button>
-        <span class="truncate text-sm font-semibold tracking-wide">{{ title }}</span>
+      <!-- horná lišta – vždy viditeľná: na mobile tlačidlo menu, názov aplikácie, vpravo akcie (#header, napr. oznámenia) -->
+      <header class="flex h-14 shrink-0 items-center gap-2 border-b bg-card px-2 md:px-6">
+        <Button variant="ghost" size="icon" class="md:hidden" :aria-label="pt('openMenu')" @click="mobileOpen = true"><Menu class="size-5" aria-hidden="true" /></Button>
+        <span class="min-w-0 flex-1 truncate text-sm font-semibold tracking-wide">{{ heading ?? title }}</span>
+        <slot name="header" />
       </header>
+      <!-- oznámenia nad obsahom (AnnouncementBar) -->
+      <slot name="notices" />
       <main id="obsah" class="flex-1 overflow-y-auto p-4 md:p-6">
         <div class="mx-auto max-w-6xl space-y-6"><slot /></div>
       </main>
