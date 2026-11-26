@@ -10,10 +10,11 @@ const titles = (s: ReturnType<typeof portalSections>) => s.map((x) => x.title ??
 describe('spoločné menu', () => {
   it('v aquariu: hash odkazy, CRM a aktuálna stránka', () => {
     const s = portalSections({ portalUrl: '', apps, crm: true, portalPage: 'contacts' })
-    expect(titles(s)).toEqual(['', 'CRM', 'Administrácia', 'Produkty'])
+    expect(titles(s)).toEqual(['', 'CRM', 'Prevádzka', 'Administrácia', 'Produkty'])
     expect(s[0].items[0]).toMatchObject({ href: '#/', current: false })
     expect(s[1].items[1]).toMatchObject({ href: '#/kontakty', current: true })
-    expect(s[3].items).toEqual([expect.objectContaining({ href: 'https://orgasm.example/?lang=sk&theme=system', external: true })])
+    expect(s[2].items[0]).toMatchObject({ href: '#/oznamenia', current: false })
+    expect(s[4].items).toEqual([expect.objectContaining({ href: 'https://orgasm.example/?lang=sk&theme=system', external: true })])
   })
 
   it('v admin aplikácii: odkazy do aquaria, sekcia aplikácie hneď pod prehľadom, bez CRM pre bežného operátora', () => {

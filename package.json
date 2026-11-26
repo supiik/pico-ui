@@ -1,6 +1,6 @@
 {
   "name": "@supiik/pico-ui",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Spoločné UI aquaria a admin aplikácií: komponenty shadcn-vue, DataTable, FormDialog, confirm, AppShell s ľavým menu, ikony aplikácií, spinner a téma.",
   "license": "UNLICENSED",
   "private": true,
@@ -33,7 +33,11 @@
     "./colorTheme": "./src/colorTheme.ts",
     "./prefs": "./src/prefs.ts",
     "./messages": "./src/messages.ts",
-    "./PrefsSwitch.vue": "./src/components/PrefsSwitch.vue"
+    "./PrefsSwitch.vue": "./src/components/PrefsSwitch.vue",
+    "./notices": "./src/notices.ts",
+    "./NoticeBar.vue": "./src/components/NoticeBar.vue",
+    "./NoticeBell.vue": "./src/components/NoticeBell.vue",
+    "./MaintenanceScreen.vue": "./src/components/MaintenanceScreen.vue"
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",

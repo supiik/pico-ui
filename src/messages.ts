@@ -29,6 +29,20 @@ const sk = {
   navContacts: 'Kontakty',
   navAdmin: 'Administrácia',
   navProducts: 'Produkty',
+  navOps: 'Prevádzka',
+  navNotices: 'Oznámenia',
+  notices: 'Oznámenia',
+  noticesNone: 'Žiadne oznámenia',
+  noticesCount: 'Oznámenia: {count}',
+  dismiss: 'Zavrieť oznámenie',
+  noticeUntil: 'do {date}',
+  kindInfo: 'Informácia',
+  kindWarning: 'Upozornenie',
+  kindOutage: 'Výpadok',
+  kindMaintenance: 'Údržba',
+  maintenanceTitle: 'Prebieha údržba',
+  maintenanceUntil: 'Predpokladaný koniec: {date}',
+  maintenanceRetry: 'Aplikácia je dočasne nedostupná. Stránka sa obnoví sama, keď bude údržba hotová.',
 }
 
 const en: Record<keyof typeof sk, string> = {
@@ -59,6 +73,20 @@ const en: Record<keyof typeof sk, string> = {
   navContacts: 'Contacts',
   navAdmin: 'Administration',
   navProducts: 'Products',
+  navOps: 'Operations',
+  navNotices: 'Announcements',
+  notices: 'Announcements',
+  noticesNone: 'No announcements',
+  noticesCount: 'Announcements: {count}',
+  dismiss: 'Dismiss announcement',
+  noticeUntil: 'until {date}',
+  kindInfo: 'Information',
+  kindWarning: 'Warning',
+  kindOutage: 'Outage',
+  kindMaintenance: 'Maintenance',
+  maintenanceTitle: 'Maintenance in progress',
+  maintenanceUntil: 'Expected end: {date}',
+  maintenanceRetry: 'The app is temporarily unavailable. The page reloads by itself when maintenance is over.',
 }
 
 export const PICO_MESSAGES = { sk, en }

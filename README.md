@@ -17,6 +17,7 @@ Balík je zdrojový (TypeScript a Vue SFC bez buildu) – skompiluje ho Vite apl
 | `@supiik/pico-ui/colorTheme` | svetlá / tmavá / podľa zariadenia (trieda `dark` na `<html>`, localStorage `theme`) |
 | `@supiik/pico-ui/prefs` | `carryPrefs(url)` – odkaz do inej aplikácie nesie `?lang=&theme=`; cieľ ich prevezme pri načítaní |
 | `@supiik/pico-ui/PrefsSwitch.vue` | prepínač jazyka a témy (v AppShell je v pätičke menu) |
+| `@supiik/pico-ui/notices`, `NoticeBar.vue`, `NoticeBell.vue`, `MaintenanceScreen.vue` | oznámenia z aquaria (statický JSON `<VITE_NOTICES_URL>/operators.json` alebo `customers-<produkt>.json`): `useNotices({ url, file, product })`, pruh nad obsahom (slot `#notices` v AppShell), zvonček v hornej lište (`#header`), stránka údržby pre zákazníkov |
 | `@supiik/pico-ui/utils` | `cn()` |
 | `@supiik/pico-ui/theme.css` | téma Tailwind 4 (farby, zaoblenie, písmo) |
 

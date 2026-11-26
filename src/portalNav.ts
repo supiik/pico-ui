@@ -1,7 +1,7 @@
 // Spoločné ľavé menu aquaria a všetkých admin aplikácií: Prehľad, stránky aktuálnej aplikácie, CRM, Administrácia, Produkty.
 // Každá aplikácia ho skladá sama z registra aplikácií (SSM /aquarium/<vetva>/apps, pri builde) – aplikácie ostávajú
 // samostatné, spoločný je len vzhľad a SSO. Zoznam `apps` musí byť už odfiltrovaný pravidlom canOpen (pico-security).
-import { Contact, LayoutDashboard, Users } from '@lucide/vue'
+import { Contact, LayoutDashboard, Megaphone, Users } from '@lucide/vue'
 import { APP_ICONS } from './icons.ts'
 import { pt } from './messages.ts'
 import { carryPrefs } from './prefs.ts'
@@ -16,14 +16,14 @@ export interface PortalNavApp {
 }
 
 /** stránky rozcestníka (hash router aquaria) */
-export type PortalPage = 'home' | 'customers' | 'contacts'
+export type PortalPage = 'home' | 'customers' | 'contacts' | 'notices'
 
 export interface PortalNavOptions {
   /** adresa aquaria; prázdna = sme v aquariu (odkazy len #/…) */
   portalUrl: string
   /** admin aplikácie, kam operátor smie (bez rozcestníka) */
   apps: PortalNavApp[]
-  /** zobraziť CRM (superadmin a nasadené CRM) */
+  /** zobraziť CRM a Prevádzku (superadmin a nasadené CRM) */
   crm: boolean
   /** aktuálna stránka aquaria – len v aquariu */
   portalPage?: PortalPage | null
@@ -44,6 +44,10 @@ export function portalSections(o: PortalNavOptions): NavSection[] {
     out.push({ title: pt('navCrm'), items: [
       { href: portal('zakaznici'), label: pt('navCustomers'), icon: Users, current: o.portalPage === 'customers' },
       { href: portal('kontakty'), label: pt('navContacts'), icon: Contact, current: o.portalPage === 'contacts' },
+    ] })
+    // prevádzka (oznámenia, údržba) – tiež len superadmin, v aquariu
+    out.push({ title: pt('navOps'), items: [
+      { href: portal('oznamenia'), label: pt('navNotices'), icon: Megaphone, current: o.portalPage === 'notices' },
     ] })
   }
   if (o.apps.length) {
