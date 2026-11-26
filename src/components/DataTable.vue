@@ -1,9 +1,12 @@
 <script setup lang="ts" generic="T">
 // Tabuľka dát: stĺpce, riadky, načítanie (spinner), prázdny stav, zebra (z ui/table).
 // Vlastné zobrazenie bunky cez slot #cell-<kľúč>="{ row, value }", akcie riadku cez slot #actions="{ row }".
+// S @refresh má tabuľka vpravo hore tlačidlo Obnoviť (pri načítaní sa točí, riadky ostanú); vedľa neho slot #toolbar.
 import type { HTMLAttributes } from 'vue'
 import { cn } from '../utils.ts'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table'
+import { RefreshCw } from '@lucide/vue'
+import { Button } from '../ui/button'
 import Spinner from './Spinner.vue'
 
 export interface Column {
@@ -29,11 +32,14 @@ const props = withDefaults(defineProps<{
   /** riadok označený ako vybraný */
   selected?: (row: T) => boolean
   class?: HTMLAttributes['class']
+  /** obnovenie dát – zobrazí tlačidlo Obnoviť (v šablóne ako @refresh) */
+  onRefresh?: () => unknown
 }>(), { loading: false, loadingLabel: 'Načítavam…', empty: 'Žiadne záznamy.' })
 
 defineSlots<Record<`cell-${string}`, (p: { row: T; value: unknown }) => unknown> & {
   actions?: (p: { row: T }) => unknown
   empty?: () => unknown
+  toolbar?: () => unknown
 }>()
 
 const value = (row: T, key: string) => (row as Record<string, unknown>)[key]
@@ -41,6 +47,13 @@ const align = (c: Column) => (c.align === 'right' ? 'text-right' : '')
 </script>
 
 <template>
+  <div v-if="onRefresh || $slots.toolbar" class="flex flex-wrap items-center justify-end gap-2 pb-2">
+    <slot name="toolbar" />
+    <Button v-if="onRefresh" type="button" variant="outline" size="sm" :disabled="loading" :aria-label="caption ? `Obnoviť – ${caption}` : 'Obnoviť'" @click="onRefresh()">
+      <RefreshCw aria-hidden="true" :class="loading && 'animate-spin motion-reduce:animate-none'" />Obnoviť
+    </Button>
+    <span v-if="loading && rows.length" class="sr-only" role="status">{{ loadingLabel }}</span>
+  </div>
   <Table :class="props.class" :aria-busy="loading">
     <caption v-if="caption" class="sr-only">{{ caption }}</caption>
     <TableHeader>
