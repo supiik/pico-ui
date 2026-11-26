@@ -4,6 +4,7 @@ import type { HTMLAttributes } from "vue"
 import { X } from "@lucide/vue"
 import { reactiveOmit } from "@vueuse/core"
 import { cn } from "../../utils.ts"
+import { pt } from '../../messages.ts' // úprava oproti registru: preložený text
 import {
   DialogClose,
   DialogContent,
@@ -51,7 +52,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
           class="absolute top-4 right-4 p-0.5 transition-colors rounded-md hover:bg-secondary"
         >
           <X class="w-4 h-4" />
-          <span class="sr-only">Zavrieť</span>
+          <span class="sr-only">{{ pt('close') }}</span>
         </DialogClose>
       </DialogContent>
     </DialogOverlay>

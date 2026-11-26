@@ -13,14 +13,14 @@ describe('spoločné menu', () => {
     expect(titles(s)).toEqual(['', 'CRM', 'Administrácia', 'Produkty'])
     expect(s[0].items[0]).toMatchObject({ href: '#/', current: false })
     expect(s[1].items[1]).toMatchObject({ href: '#/kontakty', current: true })
-    expect(s[3].items).toEqual([expect.objectContaining({ href: 'https://orgasm.example/', external: true })])
+    expect(s[3].items).toEqual([expect.objectContaining({ href: 'https://orgasm.example/?lang=sk&theme=system', external: true })])
   })
 
   it('v admin aplikácii: odkazy do aquaria, sekcia aplikácie hneď pod prehľadom, bez CRM pre bežného operátora', () => {
     const pages = [{ href: '#/licencie', label: 'Licencie', current: true }]
     const s = portalSections({ portalUrl: 'https://aq.example/', apps, crm: false, current: { id: 'orgasm', name: 'Orgasm admin', pages } })
     expect(titles(s)).toEqual(['', 'Orgasm admin', 'Administrácia', 'Produkty'])
-    expect(s[0].items[0].href).toBe('https://aq.example/#/')
+    expect(s[0].items[0].href).toBe('https://aq.example/?lang=sk&theme=system#/')
     expect(s[1].items).toBe(pages)
   })
 

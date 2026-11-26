@@ -8,6 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '.
 import { RefreshCw } from '@lucide/vue'
 import { Button } from '../ui/button'
 import Spinner from './Spinner.vue'
+import { pt } from '../messages.ts'
 
 export interface Column {
   /** kľúč v riadku (alebo len názov slotu) */
@@ -34,7 +35,7 @@ const props = withDefaults(defineProps<{
   class?: HTMLAttributes['class']
   /** obnovenie dát – zobrazí tlačidlo Obnoviť (v šablóne ako @refresh) */
   onRefresh?: () => unknown
-}>(), { loading: false, loadingLabel: 'Načítavam…', empty: 'Žiadne záznamy.' })
+}>(), { loading: false })
 
 defineSlots<Record<`cell-${string}`, (p: { row: T; value: unknown }) => unknown> & {
   actions?: (p: { row: T }) => unknown
@@ -49,26 +50,26 @@ const align = (c: Column) => (c.align === 'right' ? 'text-right' : '')
 <template>
   <div v-if="onRefresh || $slots.toolbar" class="flex flex-wrap items-center justify-end gap-2 pb-2">
     <slot name="toolbar" />
-    <Button v-if="onRefresh" type="button" variant="outline" size="sm" :disabled="loading" :aria-label="caption ? `Obnoviť – ${caption}` : 'Obnoviť'" @click="onRefresh()">
-      <RefreshCw aria-hidden="true" :class="loading && 'animate-spin motion-reduce:animate-none'" />Obnoviť
+    <Button v-if="onRefresh" type="button" variant="outline" size="sm" :disabled="loading" :aria-label="caption ? pt('refreshOf', { what: caption }) : pt('refresh')" @click="onRefresh()">
+      <RefreshCw aria-hidden="true" :class="loading && 'animate-spin motion-reduce:animate-none'" />{{ pt('refresh') }}
     </Button>
-    <span v-if="loading && rows.length" class="sr-only" role="status">{{ loadingLabel }}</span>
+    <span v-if="loading && rows.length" class="sr-only" role="status">{{ loadingLabel ?? pt('loading') }}</span>
   </div>
   <Table :class="props.class" :aria-busy="loading">
     <caption v-if="caption" class="sr-only">{{ caption }}</caption>
     <TableHeader>
       <TableRow>
         <TableHead v-for="c in columns" :key="c.key" :class="cn(align(c), c.class)">{{ c.label }}</TableHead>
-        <TableHead v-if="$slots.actions"><span class="sr-only">Akcie</span></TableHead>
+        <TableHead v-if="$slots.actions"><span class="sr-only">{{ pt('actions') }}</span></TableHead>
       </TableRow>
     </TableHeader>
     <TableBody>
       <TableRow v-if="loading && !rows.length">
-        <TableCell :colspan="columns.length + ($slots.actions ? 1 : 0)"><Spinner :label="loadingLabel" /></TableCell>
+        <TableCell :colspan="columns.length + ($slots.actions ? 1 : 0)"><Spinner :label="loadingLabel ?? pt('loading')" /></TableCell>
       </TableRow>
       <TableRow v-else-if="!rows.length">
         <TableCell :colspan="columns.length + ($slots.actions ? 1 : 0)" class="text-muted-foreground">
-          <slot name="empty">{{ empty }}</slot>
+          <slot name="empty">{{ empty ?? pt('noRows') }}</slot>
         </TableCell>
       </TableRow>
       <TableRow v-for="row in rows" :key="rowKey(row)" :data-state="selected?.(row) ? 'selected' : undefined">

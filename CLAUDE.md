@@ -1,6 +1,9 @@
 # pico-ui – pokyny pre Claude
 
-Zdrojový balík `@supiik/pico-ui`: spoločné UI aquaria a admin aplikácií. Popis exportov v README.md. Celé UI a komentáre po slovensky.
+Zdrojový balík `@supiik/pico-ui`: spoločné UI aquaria, admin aplikácií a produktov. Popis exportov v README.md. Komentáre po slovensky.
+- **Jazyky SK a EN:** žiadny text napevno – všetko cez `pt('kľúč')` z `messages.ts` (oba jazyky, test na rovnaké kľúče). Jazyk
+  `locale.ts` (cookie `locale`), téma `colorTheme.ts` (localStorage `theme`, trieda `dark`); medzi aplikáciami sa prenášajú
+  v odkazoch (`prefs.ts`, `?lang=&theme=`). Nové farby vždy pre `:root` aj `.dark` v `theme.css` (kontrast WCAG AA).
 Bezpečnosť (prihlásenie, oprávnenia, kontrakt) je v samostatnom balíku `@supiik/pico-security` – sem nepatrí.
 
 - **Git commity po anglicky** (conventional commits). **Kľúče a heslá nikdy do gitu.**

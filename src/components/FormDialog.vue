@@ -5,6 +5,7 @@ import { Alert, AlertDescription } from '../ui/alert'
 import { Button } from '../ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '../ui/dialog'
 import Spinner from './Spinner.vue'
+import { pt } from '../messages.ts'
 
 withDefaults(defineProps<{
   title: string
@@ -15,7 +16,7 @@ withDefaults(defineProps<{
   error?: string
   /** napr. sm:max-w-2xl pre širší formulár */
   class?: string
-}>(), { submitLabel: 'Uložiť', busy: false, busyLabel: 'Ukladám…' })
+}>(), { busy: false })
 const open = defineModel<boolean>('open', { default: false })
 const emit = defineEmits<{ submit: [] }>()
 </script>
@@ -31,9 +32,9 @@ const emit = defineEmits<{ submit: [] }>()
         <Alert v-if="error" variant="destructive" role="alert"><AlertDescription>{{ error }}</AlertDescription></Alert>
         <slot />
         <DialogFooter class="items-center gap-2">
-          <Spinner v-if="busy" :label="busyLabel" class="mr-auto" />
-          <Button type="button" variant="ghost" :disabled="busy" @click="open = false">Zrušiť</Button>
-          <Button type="submit" :disabled="busy">{{ submitLabel }}</Button>
+          <Spinner v-if="busy" :label="busyLabel ?? pt('saving')" class="mr-auto" />
+          <Button type="button" variant="ghost" :disabled="busy" @click="open = false">{{ pt('cancel') }}</Button>
+          <Button type="submit" :disabled="busy">{{ submitLabel ?? pt('save') }}</Button>
         </DialogFooter>
       </form>
     </DialogContent>

@@ -13,6 +13,10 @@ Balík je zdrojový (TypeScript a Vue SFC bez buildu) – skompiluje ho Vite apl
 | `@supiik/pico-ui/confirm` + `ConfirmHost.vue` | `await confirm({ title })` namiesto `window.confirm` |
 | `@supiik/pico-ui/Spinner.vue` | indikátor asynchrónnej operácie (povinný pri každom čakaní) |
 | `@supiik/pico-ui/AppIcon.vue`, `icons`, `iconNames` | ikony aplikácií podľa názvu z registra |
+| `@supiik/pico-ui/locale` | jazyk SK/EN: `locale`, `setLocale`, `createT({ sk, en })` (parametre `{x}`, tvary podľa `count`: `1|2–4|5+`), `formatDate`, `missingKeys` pre test |
+| `@supiik/pico-ui/colorTheme` | svetlá / tmavá / podľa zariadenia (trieda `dark` na `<html>`, localStorage `theme`) |
+| `@supiik/pico-ui/prefs` | `carryPrefs(url)` – odkaz do inej aplikácie nesie `?lang=&theme=`; cieľ ich prevezme pri načítaní |
+| `@supiik/pico-ui/PrefsSwitch.vue` | prepínač jazyka a témy (v AppShell je v pätičke menu) |
 | `@supiik/pico-ui/utils` | `cn()` |
 | `@supiik/pico-ui/theme.css` | téma Tailwind 4 (farby, zaoblenie, písmo) |
 
