@@ -15,7 +15,8 @@ describe('spoločné menu', () => {
     expect(s[1].items[1]).toMatchObject({ href: '#/kontakty', current: true })
     expect(s[2].items[0]).toMatchObject({ href: '#/oznamenia', current: false })
     expect(s[2].items[1]).toMatchObject({ href: '#/operatori', label: 'Operátori' })
-    expect(s[4].items).toEqual([expect.objectContaining({ href: 'https://orgasm.example/?lang=sk&theme=system', external: true })])
+    // produkty v aquariu nie sú (len v menu ich admin aplikácie)
+    expect(s.flatMap((x) => x.items).some((i) => i.href.includes('orgasm.example'))).toBe(false)
   })
 
   it('v admin aplikácii len vlastné: späť do aquaria, stránky aplikácie a jej produkt – bez CRM a iných aplikácií aj pre superadmina', () => {
