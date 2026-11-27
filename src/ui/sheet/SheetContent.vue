@@ -9,6 +9,7 @@ import {
   DialogClose,
   DialogContent,
   DialogPortal,
+  DialogTitle,
   useForwardPropsEmits,
 } from "reka-ui"
 import SheetOverlay from "./SheetOverlay.vue"
@@ -16,6 +17,8 @@ import SheetOverlay from "./SheetOverlay.vue"
 interface SheetContentProps extends DialogContentProps {
   class?: HTMLAttributes["class"]
   side?: "top" | "right" | "bottom" | "left"
+  /** úprava oproti registru: názov pre čítačku (Reka ho vyžaduje); viditeľný nadpis si obsah robí sám, alebo použi SheetTitle */
+  title?: string
 }
 
 defineOptions({
@@ -27,7 +30,7 @@ const props = withDefaults(defineProps<SheetContentProps>(), {
 })
 const emits = defineEmits<DialogContentEmits>()
 
-const delegatedProps = reactiveOmit(props, "class", "side")
+const delegatedProps = reactiveOmit(props, "class", "side", "title")
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
 </script>
@@ -50,6 +53,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
         props.class)"
       v-bind="{ ...$attrs, ...forwarded }"
     >
+      <DialogTitle v-if="title" class="sr-only">{{ title }}</DialogTitle>
       <slot />
 
       <DialogClose
