@@ -1,8 +1,10 @@
 <script setup lang="ts">
 // Rám aplikácie ako v orgasme: ľavé menu (od šírky md), na mobile horná lišta s tlačidlom a vysúvacím menu.
 // Obsah stránky do predvoleného slotu; dole voliteľná pätička.
+// Režim podpory (`support`): pätička sa zafarbí a ukáže, koho operátor práve vidí, s tlačidlom Ukončiť (udalosť end-support).
+// Pätička je vždy viditeľná (obsah sa posúva nad ňou), preto je pruh podpory tu a nezaberá miesto nad obsahom.
 import { onBeforeUnmount, ref } from 'vue'
-import { Menu } from '@lucide/vue'
+import { Eye, Menu } from '@lucide/vue'
 import { Button } from '../ui/button'
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from '../ui/sheet'
 import type { NavSection } from '../nav.ts'
@@ -22,8 +24,10 @@ defineProps<{
   version?: string
   /** skrátený commit buildu (AWS_COMMIT_ID v Amplify) – pri verzii */
   build?: string
+  /** režim podpory: text pre pätičku, napr. „Režim podpory: ZŠ Hradná (C-0042) – len na čítanie“ */
+  support?: string
 }>()
-const emit = defineEmits<{ logout: [] }>()
+const emit = defineEmits<{ logout: []; 'end-support': [] }>()
 const mobileOpen = ref(false)
 // po zmene stránky (hash) sa vysúvacie menu zatvorí
 const close = () => (mobileOpen.value = false)
@@ -62,9 +66,15 @@ onBeforeUnmount(() => window.removeEventListener('hashchange', close))
         <div class="mx-auto max-w-6xl space-y-6"><slot /></div>
       </main>
       <!-- pätička ako v orgasme: vľavo názov, vpravo verzia (a build) -->
-      <footer v-if="footer || version || $slots.footer" class="flex shrink-0 items-center justify-between gap-4 border-t px-4 py-3 text-xs text-muted-foreground md:px-6">
+      <footer v-if="footer || version || support || $slots.footer"
+        :class="['flex shrink-0 flex-wrap items-center justify-between gap-x-4 gap-y-2 border-t px-4 py-3 text-xs md:px-6',
+          support ? 'border-primary bg-primary text-primary-foreground' : 'text-muted-foreground']">
         <slot name="footer">
-          <span>{{ footer ?? title }}</span>
+          <span v-if="support" role="status" class="flex min-w-0 items-center gap-2 text-sm">
+            <Eye class="size-4 shrink-0" aria-hidden="true" /><span class="min-w-0">{{ support }}</span>
+            <Button variant="secondary" size="sm" class="ml-2" @click="emit('end-support')">{{ pt('supportEnd') }}</Button>
+          </span>
+          <span v-else>{{ footer ?? title }}</span>
           <span v-if="version" class="tabular-nums">v{{ version }}<template v-if="build"> · <span class="font-mono">{{ build }}</span></template></span>
         </slot>
       </footer>
