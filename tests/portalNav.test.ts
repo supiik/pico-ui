@@ -21,12 +21,12 @@ describe('spoločné menu', () => {
   it('v admin aplikácii len vlastné: späť do aquaria, stránky aplikácie a jej produkt – bez CRM a iných aplikácií aj pre superadmina', () => {
     const pages = [{ href: '#/licencie', label: 'Licencie', current: true }]
     const s = portalSections({ portalUrl: 'https://aq.example/', apps, crm: true, current: { id: 'orgasm', name: 'Orgasm admin', pages } })
-    expect(titles(s)).toEqual(['', 'Orgasm admin', 'Produkt'])
+    expect(titles(s)).toEqual(['', '', 'Produkt'])
     expect(s[0].items).toEqual([expect.objectContaining({ href: 'https://aq.example/?lang=sk&theme=system#/', label: 'Späť do aquaria' })])
     expect(s[1].items).toBe(pages)
     expect(s[2].items).toEqual([expect.objectContaining({ label: 'Orgasm', href: 'https://orgasm.example/?lang=sk&theme=system', external: true })])
     // aplikácia bez produktu: len späť a stránky
-    expect(titles(portalSections({ portalUrl: 'https://aq.example/', apps, crm: true, current: { id: 'sharpn', name: 'Sharpn admin', pages } }))).toEqual(['', 'Sharpn admin'])
+    expect(titles(portalSections({ portalUrl: 'https://aq.example/', apps, crm: true, current: { id: 'sharpn', name: 'Sharpn admin', pages } }))).toEqual(['', ''])
   })
 
   it('bez aplikácií a produktov sa prázdne sekcie nezobrazia', () => {

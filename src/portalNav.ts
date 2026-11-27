@@ -42,7 +42,8 @@ export function portalSections(o: PortalNavOptions): NavSection[] {
   // admin aplikácia: len späť do aquaria, vlastné stránky a vlastný produkt
   if (o.current) {
     const out: NavSection[] = [{ items: [{ href: portal(''), label: pt('navBackToPortal'), icon: ArrowLeft }] }]
-    if (o.current.pages.length) out.push({ title: o.current.name, items: o.current.pages })
+    // názov aplikácie je v hlavičke menu (AppShell title), sekcia ho neopakuje
+    if (o.current.pages.length) out.push({ items: o.current.pages })
     const product = o.apps.find((a) => a.id === o.current?.id)?.product
     if (product) out.push({ title: pt('navProduct'), items: [{ href: carryPrefs(product.url), label: product.name, icon: appIcon(product.icon), external: true }] })
     return out
