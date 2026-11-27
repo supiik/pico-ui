@@ -14,6 +14,7 @@ describe('spoločné menu', () => {
     expect(s[0].items[0]).toMatchObject({ href: '#/', current: false })
     expect(s[1].items[1]).toMatchObject({ href: '#/kontakty', current: true })
     expect(s[2].items[0]).toMatchObject({ href: '#/oznamenia', current: false })
+    expect(s[2].items[1]).toMatchObject({ href: '#/operatori', label: 'Operátori' })
     expect(s[4].items).toEqual([expect.objectContaining({ href: 'https://orgasm.example/?lang=sk&theme=system', external: true })])
   })
 
