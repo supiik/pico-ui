@@ -79,7 +79,8 @@ export function useNotices(o: NoticesOptions) {
     // každý súbor zvlášť: pri chybe jedného ostane jeho posledný známy stav, ostatné sa obnovia
     const lists = await Promise.all(files.map(async (f, i) => {
       try {
-        const r = await fetchFn(`${base}/${f}`, { cache: 'no-cache' })
+        // no-store: bez overovania uloženej kópie (304) – pri nej mohla chýbať hlavička CORS
+        const r = await fetchFn(`${base}/${f}`, { cache: 'no-store' })
         if (!r.ok) return byFile[i] ?? []
         const data = (await r.json()) as unknown
         return Array.isArray(data) ? data.filter(isNotice) : []
