@@ -20,6 +20,7 @@ Balík je zdrojový (TypeScript a Vue SFC bez buildu) – skompiluje ho Vite apl
 | `@supiik/pico-ui/notices`, `NoticeBar.vue`, `NoticeBell.vue`, `MaintenanceScreen.vue` | oznámenia z aquaria (statický JSON `<VITE_NOTICES_URL>/operators.json` alebo `customers-<produkt>.json`): `useNotices({ url, file, product })`, pruh nad obsahom (slot `#notices` v AppShell), zvonček v hornej lište (`#header`), stránka údržby pre zákazníkov |
 | `@supiik/pico-ui/utils` | `cn()` |
 | `@supiik/pico-ui/theme.css` | téma Tailwind 4 (farby, zaoblenie, písmo) |
+| `@supiik/pico-ui/MockBar.vue` | **len lokálny vývoj** (`npm run dev:mock`): plávajúci prepínač ukážkového účtu (`roles`, `current`, `@select`); načítať len pri `VITE_MOCK` cez `defineAsyncComponent` |
 
 ## Použitie v aplikácii
 
