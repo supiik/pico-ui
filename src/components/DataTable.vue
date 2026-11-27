@@ -2,6 +2,9 @@
 // Tabuľka dát: stĺpce, riadky, načítanie (spinner), prázdny stav, zebra (z ui/table).
 // Vlastné zobrazenie bunky cez slot #cell-<kľúč>="{ row, value }", akcie riadku cez slot #actions="{ row }".
 // S @refresh má tabuľka vpravo hore tlačidlo Obnoviť (pri načítaní sa točí, riadky ostanú); vedľa neho slot #toolbar.
+// Klikateľný riadok (ruka ako v orgasme): `row-href` = odkaz na detail záznamu, alebo @row-click (napr. otvorenie formulára).
+// Klik na tlačidlo či odkaz v riadku sa neprekladá na klik riadku; Ctrl/⌘/stredné tlačidlo otvorí odkaz na novej karte;
+// riadok je dosiahnuteľný klávesnicou (Tab, Enter).
 import type { HTMLAttributes } from 'vue'
 import { cn } from '../utils.ts'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table'
@@ -35,6 +38,10 @@ const props = withDefaults(defineProps<{
   class?: HTMLAttributes['class']
   /** obnovenie dát – zobrazí tlačidlo Obnoviť (v šablóne ako @refresh) */
   onRefresh?: () => unknown
+  /** odkaz na detail záznamu – celý riadok je klikateľný */
+  rowHref?: (row: T) => string | undefined
+  /** klik na riadok (v šablóne ako @row-click), ak nie je odkaz */
+  onRowClick?: (row: T) => unknown
 }>(), { loading: false })
 
 defineSlots<Record<`cell-${string}`, (p: { row: T; value: unknown }) => unknown> & {
@@ -45,6 +52,21 @@ defineSlots<Record<`cell-${string}`, (p: { row: T; value: unknown }) => unknown>
 
 const value = (row: T, key: string) => (row as Record<string, unknown>)[key]
 const align = (c: Column) => (c.align === 'right' ? 'text-right' : '')
+
+const clickable = (row: T) => !!(props.rowHref?.(row) || props.onRowClick)
+// prvky, ktoré majú vlastnú akciu – klik na ne neotvára riadok
+const INTERACTIVE = 'a, button, input, select, textarea, label, [role="button"], [role="checkbox"], [contenteditable]'
+function activate(row: T, e: MouseEvent | KeyboardEvent) {
+  const target = e.target as HTMLElement | null
+  if (target?.closest(INTERACTIVE) && target.closest('tr') === e.currentTarget) return
+  if (window.getSelection()?.toString()) return // označovanie textu nie je klik
+  const href = props.rowHref?.(row)
+  if (href) {
+    const newTab = 'button' in e && (e.button === 1 || e.ctrlKey || e.metaKey)
+    if (newTab) window.open(href, '_blank', 'noopener')
+    else window.location.assign(href)
+  } else props.onRowClick?.(row)
+}
 </script>
 
 <template>
@@ -72,7 +94,11 @@ const align = (c: Column) => (c.align === 'right' ? 'text-right' : '')
           <slot name="empty">{{ empty ?? pt('noRows') }}</slot>
         </TableCell>
       </TableRow>
-      <TableRow v-for="row in rows" :key="rowKey(row)" :data-state="selected?.(row) ? 'selected' : undefined">
+      <TableRow v-for="row in rows" :key="rowKey(row)" :data-state="selected?.(row) ? 'selected' : undefined"
+        :tabindex="clickable(row) ? 0 : undefined"
+        :class="clickable(row) && 'cursor-pointer focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring'"
+        @click="clickable(row) && activate(row, $event)" @auxclick="clickable(row) && $event.button === 1 && activate(row, $event)"
+        @keydown.enter.self="clickable(row) && activate(row, $event)">
         <template v-for="c in columns" :key="c.key">
           <component :is="c.rowHeader ? TableHead : TableCell" :scope="c.rowHeader ? 'row' : undefined" :class="cn(align(c), c.rowHeader && 'font-medium text-foreground', c.class)">
             <slot :name="`cell-${c.key}`" :row="row" :value="value(row, c.key)">{{ value(row, c.key) ?? '—' }}</slot>
