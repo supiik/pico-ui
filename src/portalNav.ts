@@ -1,7 +1,7 @@
-// Spoločné ľavé menu aquaria a všetkých admin aplikácií: Prehľad, stránky aktuálnej aplikácie, CRM, Administrácia, Produkty.
-// Každá aplikácia ho skladá sama z registra aplikácií (SSM /aquarium/<vetva>/apps, pri builde) – aplikácie ostávajú
-// samostatné, spoločný je len vzhľad a SSO. Zoznam `apps` musí byť už odfiltrovaný pravidlom canOpen (pico-security).
-import { Contact, LayoutDashboard, Megaphone, UserCog, Users } from '@lucide/vue'
+// Ľavé menu. V aquariu celé: Prehľad, CRM, Prevádzka, Administrácia, Produkty (z registra aplikácií, SSM /aquarium/<vetva>/apps).
+// V admin aplikácii (`current`) len jej vlastné: odkaz späť do aquaria, jej stránky a jej produkt – stránky aquaria ani iné
+// aplikácie sa do nej neskladajú (tie sú v aquariu). Zoznam `apps` musí byť už odfiltrovaný pravidlom canOpen (pico-security).
+import { ArrowLeft, Contact, LayoutDashboard, Megaphone, UserCog, Users } from '@lucide/vue'
 import { APP_ICONS } from './icons.ts'
 import { pt } from './messages.ts'
 import { carryPrefs } from './prefs.ts'
@@ -23,7 +23,7 @@ export interface PortalNavOptions {
   portalUrl: string
   /** admin aplikácie, kam operátor smie (bez rozcestníka) */
   apps: PortalNavApp[]
-  /** zobraziť CRM a Prevádzku (superadmin a nasadené CRM) */
+  /** zobraziť CRM a Prevádzku (superadmin a nasadené CRM) – len v aquariu, v admin aplikácii sa ignoruje */
   crm: boolean
   /** aktuálna stránka aquaria – len v aquariu */
   portalPage?: PortalPage | null
@@ -38,8 +38,17 @@ export function portalSections(o: PortalNavOptions): NavSection[] {
   // v aquariu stačí hash, v admin aplikácii plná adresa aquaria
   // odkazy do iných aplikácií nesú jazyk a tému (rôzne domény, pozri prefs.ts)
   const portal = (path: string) => (base ? carryPrefs(`${base}/#/${path}`) : `#/${path}`)
+
+  // admin aplikácia: len späť do aquaria, vlastné stránky a vlastný produkt
+  if (o.current) {
+    const out: NavSection[] = [{ items: [{ href: portal(''), label: pt('navBackToPortal'), icon: ArrowLeft }] }]
+    if (o.current.pages.length) out.push({ title: o.current.name, items: o.current.pages })
+    const product = o.apps.find((a) => a.id === o.current?.id)?.product
+    if (product) out.push({ title: pt('navProduct'), items: [{ href: carryPrefs(product.url), label: product.name, icon: appIcon(product.icon), external: true }] })
+    return out
+  }
+
   const out: NavSection[] = [{ items: [{ href: portal(''), label: pt('navHome'), icon: LayoutDashboard, current: o.portalPage === 'home' }] }]
-  if (o.current?.pages.length) out.push({ title: o.current.name, items: o.current.pages })
   if (o.crm) {
     out.push({ title: pt('navCrm'), items: [
       { href: portal('zakaznici'), label: pt('navCustomers'), icon: Users, current: o.portalPage === 'customers' },
