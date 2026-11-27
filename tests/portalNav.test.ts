@@ -10,7 +10,7 @@ const titles = (s: ReturnType<typeof portalSections>) => s.map((x) => x.title ??
 describe('spoločné menu', () => {
   it('v aquariu: hash odkazy, CRM a aktuálna stránka', () => {
     const s = portalSections({ portalUrl: '', apps, crm: true, portalPage: 'contacts' })
-    expect(titles(s)).toEqual(['', 'CRM', 'Prevádzka', 'Administrácia', 'Produkty'])
+    expect(titles(s)).toEqual(['', 'CRM', 'Prevádzka', 'Administrácia'])
     expect(s[0].items[0]).toMatchObject({ href: '#/', current: false })
     expect(s[1].items[1]).toMatchObject({ href: '#/kontakty', current: true })
     expect(s[2].items[0]).toMatchObject({ href: '#/oznamenia', current: false })

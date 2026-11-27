@@ -7,7 +7,7 @@ Balík je zdrojový (TypeScript a Vue SFC bez buildu) – skompiluje ho Vite apl
 |---|---|
 | `@supiik/pico-ui/ui/<komponent>` | komponenty shadcn-vue (Reka UI): button, input, label, card, table, badge, alert, dialog, sheet (`title` = názov pre čítačku), select (rozbaľovací výber s `v-model` a `placeholder`), native-select, textarea, separator |
 | `@supiik/pico-ui/AppShell.vue`, `SidebarNav.vue`, `nav` | rám aplikácie: ľavé menu (sekcie, ikony, používateľ, odhlásenie, jazyk, téma), na mobile vysúvacie menu, vždy viditeľná horná lišta (`heading`, slot `#header`), miesto pre oznámenia (`#notices`), pätička s názvom a verziou (`version`, `build`) |
-| `@supiik/pico-ui/portalNav` | `portalSections()` – ľavé menu: v aquariu celé (Prehľad, CRM, Prevádzka, Administrácia, Produkty z registra aplikácií), v admin aplikácii len „Späť do aquaria“, jej stránky a jej produkt |
+| `@supiik/pico-ui/portalNav` | `portalSections()` – ľavé menu: v aquariu celé (Prehľad, CRM, Prevádzka, Administrácia z registra aplikácií; produkty nie), v admin aplikácii len „Späť do aquaria“, jej stránky a jej produkt |
 | `@supiik/pico-ui/DataTable.vue` | tabuľka dát: stĺpce, sloty buniek, akcie, načítanie, prázdny stav, zebra, tlačidlo Obnoviť (`@refresh`), klikateľný riadok (`row-href` na detail záznamu alebo `@row-click`; klávesnica, Ctrl+klik = nová karta) |
 | `@supiik/pico-ui/FormDialog.vue` | dialóg s formulárom (Uložiť/Zrušiť, chyba, spinner) |
 | `@supiik/pico-ui/confirm` + `ConfirmHost.vue` | `await confirm({ title })` namiesto `window.confirm` |

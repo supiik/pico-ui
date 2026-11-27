@@ -1,4 +1,5 @@
-// Ľavé menu. V aquariu celé: Prehľad, CRM, Prevádzka, Administrácia, Produkty (z registra aplikácií, SSM /aquarium/<vetva>/apps).
+// Ľavé menu. V aquariu celé: Prehľad, CRM, Prevádzka, Administrácia (z registra aplikácií, SSM /aquarium/<vetva>/apps).
+// Odkazy na produkty v aquariu nie sú (bez zákazníka by otvorili len prihlásenie) – produkt je v menu jeho admin aplikácie.
 // V admin aplikácii (`current`) len jej vlastné: odkaz späť do aquaria, jej stránky a jej produkt – stránky aquaria ani iné
 // aplikácie sa do nej neskladajú (tie sú v aquariu). Zoznam `apps` musí byť už odfiltrovaný pravidlom canOpen (pico-security).
 import { ArrowLeft, Contact, LayoutDashboard, Megaphone, UserCog, Users } from '@lucide/vue'
@@ -63,10 +64,6 @@ export function portalSections(o: PortalNavOptions): NavSection[] {
   }
   if (o.apps.length) {
     out.push({ title: pt('navAdmin'), items: o.apps.map((a) => ({ href: carryPrefs(a.url), label: a.name, icon: appIcon(a.icon) })) })
-  }
-  const products = o.apps.flatMap((a) => (a.product ? [a.product] : []))
-  if (products.length) {
-    out.push({ title: pt('navProducts'), items: products.map((p) => ({ href: carryPrefs(p.url), label: p.name, icon: appIcon(p.icon), external: true })) })
   }
   return out
 }
