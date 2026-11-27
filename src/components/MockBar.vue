@@ -10,7 +10,7 @@ const emit = defineEmits<{ select: [id: string] }>()
 </script>
 
 <template>
-  <div class="fixed right-4 bottom-16 z-40 flex items-center gap-2 rounded-full border border-dashed border-primary bg-card px-3 py-1.5 text-xs shadow-md">
+  <div class="fixed top-2.5 right-16 z-40 flex items-center gap-2 rounded-full border border-dashed border-primary bg-card px-3 py-1.5 text-xs shadow-md">
     <FlaskConical class="size-4 text-primary" aria-hidden="true" />
     <span class="font-semibold">{{ pt('mockData') }}</span>
     <label class="flex items-center gap-1.5">
