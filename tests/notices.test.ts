@@ -34,4 +34,22 @@ describe('oznámenia v aplikácii', () => {
     expect(s.visible.value.map((x) => x.id)).toEqual(['a'])
     scope.stop()
   })
+
+  it('viac súborov: spojí ich bez duplicít, pri chybe jedného ponechá jeho posledný stav', async () => {
+    const forever = (id: string, products = ['*']) => n(id, 'info', products, '2000-01-01T00:00:00Z', '2999-01-01T00:00:00Z')
+    let failOrgasm = false
+    const fetchFn = (async (url: string) => {
+      if (url.endsWith('customers-sharpn.json')) return { ok: true, json: async () => [forever('all'), forever('s', ['sharpn'])] }
+      if (failOrgasm) throw new Error('net')
+      return { ok: true, json: async () => [forever('all'), forever('o', ['orgasm'])] }
+    }) as unknown as typeof fetch
+    const scope = effectScope()
+    const s = scope.run(() => useNotices({ url: 'https://cdn/notices', file: ['customers-sharpn.json', 'customers-orgasm.json'], fetchFn }))!
+    await s.load()
+    expect(s.active.value.map((x) => x.id).sort()).toEqual(['all', 'o', 's'])
+    failOrgasm = true
+    await s.load()
+    expect(s.active.value.map((x) => x.id).sort()).toEqual(['all', 'o', 's'])
+    scope.stop()
+  })
 })

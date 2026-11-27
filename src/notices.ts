@@ -55,8 +55,8 @@ function writeDismissed(s: Set<string>) {
 export interface NoticesOptions {
   /** základná adresa (VITE_NOTICES_URL); bez nej nič nenačíta */
   url?: string
-  /** operators.json alebo customers-<produkt>.json */
-  file: string
+  /** operators.json alebo customers-<produkt>.json; viac súborov (zákazník s viacerými produktmi) sa spojí */
+  file: string | string[]
   /** len oznámenia pre tento produkt (admin aplikácia: jej id); bez neho všetky */
   product?: string
   /** ako často znova načítať (ms) */
@@ -69,18 +69,28 @@ export function useNotices(o: NoticesOptions) {
   const now = ref(Date.now())
   const dismissed = ref(readDismissed())
   const fetchFn = o.fetchFn ?? ((...a: Parameters<typeof fetch>) => fetch(...a))
+  let byFile: PublicNotice[][] = []
 
   async function load() {
     now.value = Date.now()
     if (!o.url) return
-    try {
-      const r = await fetchFn(`${o.url.replace(/\/+$/, '')}/${o.file}`, { cache: 'no-cache' })
-      if (!r.ok) return
-      const data = (await r.json()) as unknown
-      all.value = Array.isArray(data) ? data.filter(isNotice) : []
-    } catch {
-      // sieť alebo neplatný súbor: ponecháme posledný známy stav
-    }
+    const base = o.url.replace(/\/+$/, '')
+    const files = Array.isArray(o.file) ? o.file : [o.file]
+    // každý súbor zvlášť: pri chybe jedného ostane jeho posledný známy stav, ostatné sa obnovia
+    const lists = await Promise.all(files.map(async (f, i) => {
+      try {
+        const r = await fetchFn(`${base}/${f}`, { cache: 'no-cache' })
+        if (!r.ok) return byFile[i] ?? []
+        const data = (await r.json()) as unknown
+        return Array.isArray(data) ? data.filter(isNotice) : []
+      } catch {
+        return byFile[i] ?? [] // sieť alebo neplatný súbor
+      }
+    }))
+    byFile = lists
+    // to isté oznámenie môže byť vo viacerých súboroch (napr. pre všetky produkty)
+    const seen = new Set<string>()
+    all.value = lists.flat().filter((n) => !seen.has(n.id) && seen.add(n.id))
   }
 
   if (typeof window !== 'undefined' && o.url) {
