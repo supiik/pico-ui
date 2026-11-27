@@ -28,3 +28,24 @@ describe('ikony aplikácií', () => {
     for (const n of APP_ICON_NAMES) expect(APP_ICONS[n]).toBeTruthy()
   })
 })
+
+describe('confirmTyped', () => {
+  it('potvrdí sa až po napísaní „áno“/„yes“ a povinnom dôvode; vráti dôvod', async () => {
+    const { confirmTyped, confirmState, settleConfirm, isConfirmWord } = await import('../src/confirm.ts')
+    expect(['áno', ' ANO ', 'Yes'].every(isConfirmWord)).toBe(true)
+    expect(isConfirmWord('y')).toBe(false)
+    const p = confirmTyped({ title: 'Zablokovať?', reason: { label: 'Dôvod', required: true } })
+    expect(confirmState.options.variant).toBe('destructive')
+    settleConfirm(true) // nič nenapísané – ostane otvorený
+    expect(confirmState.open).toBe(true)
+    confirmState.typed = 'áno'
+    settleConfirm(true) // chýba dôvod
+    expect(confirmState.open).toBe(true)
+    confirmState.reason = '  porušenie pravidiel '
+    settleConfirm(true)
+    expect(await p).toEqual({ reason: 'porušenie pravidiel' })
+    const q = confirmTyped({ title: 'Zrušiť?' })
+    settleConfirm(false)
+    expect(await q).toBeNull()
+  })
+})

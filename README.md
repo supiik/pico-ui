@@ -10,7 +10,7 @@ Balík je zdrojový (TypeScript a Vue SFC bez buildu) – skompiluje ho Vite apl
 | `@supiik/pico-ui/portalNav` | `portalSections()` – ľavé menu: v aquariu celé (Prehľad, CRM, Prevádzka, Administrácia z registra aplikácií; produkty nie), v admin aplikácii len „Späť do aquaria“, jej stránky a jej produkt |
 | `@supiik/pico-ui/DataTable.vue` | tabuľka dát: stĺpce, sloty buniek, akcie, načítanie, prázdny stav, zebra, tlačidlo Obnoviť (`@refresh`), klikateľný riadok (`row-href` na detail záznamu alebo `@row-click`; klávesnica, Ctrl+klik = nová karta) |
 | `@supiik/pico-ui/FormDialog.vue` | dialóg s formulárom (Uložiť/Zrušiť, chyba, spinner) |
-| `@supiik/pico-ui/confirm` + `ConfirmHost.vue` | `await confirm({ title })` namiesto `window.confirm` |
+| `@supiik/pico-ui/confirm` + `ConfirmHost.vue` | `await confirm({ title })` namiesto `window.confirm`; závažné zásahy `await confirmTyped({ title, reason: { label, required } })` – potvrdenie napísaním „áno“/„yes“, vráti dôvod alebo null |
 | `@supiik/pico-ui/Spinner.vue` | indikátor asynchrónnej operácie (povinný pri každom čakaní) |
 | `@supiik/pico-ui/AppIcon.vue`, `icons`, `iconNames` | ikony aplikácií podľa názvu z registra |
 | `@supiik/pico-ui/locale` | jazyk SK/EN: `locale`, `setLocale`, `createT({ sk, en })` (parametre `{x}`, tvary podľa `count`: `1|2–4|5+`), `formatDate`, `missingKeys` pre test |
